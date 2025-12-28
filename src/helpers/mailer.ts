@@ -10,9 +10,9 @@ export const sendEmail = async({email, emailType, userId}:any) => {
       const hashedResetToken = await bcrypt.hash(userId.toString(), 5);
 
       if (emailType === 'VERIFY') {
-        await User.findByIdAndUpdate(userId, {verifyToken: hashedVerifyToken, verifyTokenExpiry: Date.now() + 3600000})
+        await User.findByIdAndUpdate(userId, { $set: {verifyToken: hashedVerifyToken, verifyTokenExpiry: Date.now() + 3600000}})
       }else if (emailType === 'RESET') {
-        await User.findByIdAndUpdate(userId, {forgotPasswordToken: hashedResetToken, forgotPasswordTokenExpiry: Date.now() + 3600000})
+        await User.findByIdAndUpdate(userId, { $set: {forgotPasswordToken: hashedResetToken, forgotPasswordTokenExpiry: Date.now() + 3600000}})
       }
 
     // Looking to send emails in production? Check out our Email API/SMTP product!
