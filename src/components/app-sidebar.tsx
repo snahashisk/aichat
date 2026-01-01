@@ -11,7 +11,19 @@ import {
   Settings2,
   Trash2,
 } from "lucide-react"
-
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 import { NavFavorites } from "@/components/nav-favorites"
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
@@ -26,6 +38,7 @@ import {
 } from "@/components/ui/sidebar"
 import { toast } from "sonner"
 import axios from "axios"
+import { useRouter } from "next/navigation"
 
 
 // This is sample data.
@@ -52,13 +65,6 @@ const data = {
       plan: "Free",
     },
   ],
-  navMain: [
-    {
-      title: "New Chat",
-      url: "#",
-      icon: FilePlus,
-    }
-  ],
   navSecondary: [
     {
       title: "Settings",
@@ -75,6 +81,8 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
+   const [openDialog, setOpenDialog] = React.useState(false)
+
   const [user, setUser] = React.useState({
     email: "",
     userName: "",
@@ -82,7 +90,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     avatar: ""
   })
 
+    const navMain = [
+    {
+      title: "New Chat",
+      icon: FilePlus,
+      onClick: () => setOpenDialog(true),
+    },
+  ]
+
   const [chatSessions, setChatSessions] = React.useState<{ name: string; url: string }[]>([]);
+
+  const router = useRouter()
 
   const loadUser = async () => {
   try {
@@ -96,12 +114,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   } catch (error: any) {
     toast.error(error.message);
+    router.push("/login")
   }
 }
 
 const loadSession = async () => {
   try {
-    const res = await axios.get(`/api/users/chatsession?user=${user.userId}`);
+    const res = await axios.get("/api/users/chatsession");
     const sessions = res.data.sessions;
     const formattedSessions = sessions.reverse().map((session: any) => ({
       name: session.title,
@@ -119,19 +138,51 @@ const loadSession = async () => {
 
 React.useEffect(()=>{
   loadUser()
+  loadSession();
 },[])
 
-React.useEffect(()=>{
-  if (!user.userId) return;  
-  loadSession();
-},[user])
+
+const [title, setTitle] = React.useState("");
+
+const submitTitle = async (e: React.FormEvent) => {
+  e.preventDefault()
+
+  setOpenDialog(false)
+  setTitle("")
+  console.log("I am clicked")
+}
 
 
   return (
     <Sidebar className="border-r-0" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
-        <NavMain items={data.navMain} />
+        <NavMain items={navMain} />
+
+    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+      <DialogContent className="sm:max-w-[425px]">
+        <form onSubmit={submitTitle}>
+          <DialogHeader>
+            <DialogTitle>New Chat Title</DialogTitle>
+            <DialogDescription>
+              Enter a title for your new chat sessions.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4">
+            <div className="grid gap-3">
+              <Input id="name-1" name="name"  value={title} onChange={(e)=>{setTitle(e.target.value)}} className="my-4"  />
+            </div>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline" onClick={() => setOpenDialog(false)}>Cancel</Button>
+            </DialogClose>
+            <Button type="submit">Create Session</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+
       </SidebarHeader>
       <SidebarContent>
         <NavFavorites favorites={chatSessions} />

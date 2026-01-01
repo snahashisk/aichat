@@ -1,13 +1,15 @@
 import { connect } from "@/dbConfig/dbConfig";
 import ChatSession from "@/models/sessionModel";
 import { NextRequest, NextResponse } from "next/server";
+import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 connect();
 
 export async function POST(request: NextRequest){
   try {
+  const user = await getDataFromToken(request)
   const reqBody = await request.json();
-  const {user, title} = reqBody;
+  const {title} = reqBody;
   console.log(reqBody);
 
   const newSession = new ChatSession({
@@ -30,10 +32,9 @@ export async function POST(request: NextRequest){
 
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = await request.nextUrl.searchParams;
-    const userId = searchParams.get("user");
+    const user = await getDataFromToken(request)
 
-    if (!userId) {
+    if (!user) {
       return NextResponse.json(
         { error: "user query parameter is required" },
         { status: 400 }
@@ -41,7 +42,7 @@ export async function GET(request: NextRequest) {
     }
 
     const sessions = await ChatSession.find({
-      user: userId
+      user: user
     })
 
     return NextResponse.json({
