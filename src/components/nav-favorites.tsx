@@ -40,7 +40,7 @@ export function NavFavorites({
       <SidebarGroupLabel>Your Chats</SidebarGroupLabel>
       <SidebarMenu>
         {favorites.map((item) => (
-          <SidebarMenuItem key={item.name}>
+          <SidebarMenuItem key={item.url}>
             <SidebarMenuButton asChild>
               <a href={item.url} title={item.name}>
                 <span>{item.name}</span>

@@ -61,24 +61,9 @@ const data = {
   ],
   navSecondary: [
     {
-      title: "Calendar",
-      url: "#",
-      icon: Calendar,
-    },
-    {
       title: "Settings",
       url: "#",
       icon: Settings2,
-    },
-    {
-      title: "Templates",
-      url: "#",
-      icon: Blocks,
-    },
-    {
-      title: "Trash",
-      url: "#",
-      icon: Trash2,
     },
     {
       title: "Help",
@@ -86,50 +71,7 @@ const data = {
       icon: MessageCircleQuestion,
     },
   ],
-  favorites: [
-    {
-      name: "Project Management",
-      url: "#",
-    },
-    {
-      name: "Family Recipe Collection",
-      url: "#",
-    },
-    {
-      name: "Fitness Tracker",
-      url: "#",
-    },
-    {
-      name: "Book Notes & Reading List",
-      url: "#",
-    },
-    {
-      name: "Sustainable Gardening",
-      url: "#",
-    },
-    {
-      name: "Language Learning",
-      url: "#",
-    },
-    {
-      name: "Home Renovation",
-      url: "#",
-    },
-    {
-      name: "Personal Finance",
-      url: "#",
-    },
-    {
-      name: "Movie & TV Show",
-      url: "#",
-    },
-    {
-      name: "Daily Habit Tracker",
-      url: "#",
-    },
-  ],
 }
-
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
@@ -139,11 +81,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     userId: "",
     avatar: ""
   })
+
+  const [chatSessions, setChatSessions] = React.useState<{ name: string; url: string }[]>([]);
+
   const loadUser = async () => {
   try {
     const res = await axios.post("/api/users/profile");
-      setUser({
-        ...user,
+    setUser({
+    ...user,
         userName: res.data.data.username,
         email: res.data.data.email,
         userId: res.data.data._id
@@ -157,7 +102,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 const loadSession = async () => {
   try {
     const res = await axios.get(`/api/users/chatsession?user=${user.userId}`);
-    console.log(res.data);
+    const sessions = res.data.sessions;
+    const formattedSessions = sessions.reverse().map((session: any) => ({
+      name: session.title,
+      url: session._id
+    }));
+
+    setChatSessions(formattedSessions)
+    console.log(formattedSessions)
+    setChatSessions(formattedSessions)
+    console.log(chatSessions)
   } catch (error: any) {
     toast.error(error.message);
   }
@@ -168,9 +122,10 @@ React.useEffect(()=>{
 },[])
 
 React.useEffect(()=>{
-  if (user.userId === "") return;  
+  if (!user.userId) return;  
   loadSession();
 },[user])
+
 
   return (
     <Sidebar className="border-r-0" {...props}>
@@ -179,7 +134,7 @@ React.useEffect(()=>{
         <NavMain items={data.navMain} />
       </SidebarHeader>
       <SidebarContent>
-        <NavFavorites favorites={data.favorites} />
+        <NavFavorites favorites={chatSessions} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
