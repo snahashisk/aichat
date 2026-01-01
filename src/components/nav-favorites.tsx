@@ -1,12 +1,6 @@
-"use client"
+"use client";
 
-import {
-  ArrowUpRight,
-  Link,
-  MoreHorizontal,
-  StarOff,
-  Trash2,
-} from "lucide-react"
+import { ArrowUpRight, MoreHorizontal, StarOff, Trash2 } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -14,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -23,17 +17,18 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
+import Link from "next/link";
 
 export function NavFavorites({
   favorites,
 }: {
   favorites: {
-    name: string
-    url: string
-  }[]
+    name: string;
+    url: string;
+  }[];
 }) {
-  const { isMobile } = useSidebar()
+  const { isMobile } = useSidebar();
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -42,9 +37,9 @@ export function NavFavorites({
         {favorites.map((item) => (
           <SidebarMenuItem key={item.url}>
             <SidebarMenuButton asChild>
-              <a href={item.url} title={item.name}>
+              <Link href={`/chatdesk/${item.url}`}>
                 <span>{item.name}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -58,10 +53,6 @@ export function NavFavorites({
                 side={isMobile ? "bottom" : "right"}
                 align={isMobile ? "end" : "start"}
               >
-                <DropdownMenuItem>
-                  <Link className="text-muted-foreground" />
-                  <span>Copy Link</span>
-                </DropdownMenuItem>
                 <DropdownMenuItem>
                   <ArrowUpRight className="text-muted-foreground" />
                   <span>Open in New Tab</span>
@@ -83,5 +74,5 @@ export function NavFavorites({
         </SidebarMenuItem> */}
       </SidebarMenu>
     </SidebarGroup>
-  )
+  );
 }

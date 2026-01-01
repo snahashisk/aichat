@@ -128,9 +128,6 @@ const loadSession = async () => {
     }));
 
     setChatSessions(formattedSessions)
-    console.log(formattedSessions)
-    setChatSessions(formattedSessions)
-    console.log(chatSessions)
   } catch (error: any) {
     toast.error(error.message);
   }
@@ -145,11 +142,20 @@ React.useEffect(()=>{
 const [title, setTitle] = React.useState("");
 
 const submitTitle = async (e: React.FormEvent) => {
-  e.preventDefault()
-
-  setOpenDialog(false)
-  setTitle("")
-  console.log("I am clicked")
+  try {
+    e.preventDefault()
+    const payload = {title: title}
+    console.log("I am tryting")
+    setOpenDialog(false)
+    const res = await axios.post("/api/users/chatsession", payload)
+    setOpenDialog(false)
+    setTitle("")
+    toast.success("New Session Created");
+    loadSession();
+    console.log(res)
+  } catch (error: any) {
+    toast.error(error.message)
+  }
 }
 
 
@@ -160,7 +166,7 @@ const submitTitle = async (e: React.FormEvent) => {
         <NavMain items={navMain} />
 
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-106.25">
         <form onSubmit={submitTitle}>
           <DialogHeader>
             <DialogTitle>New Chat Title</DialogTitle>
