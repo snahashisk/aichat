@@ -41,7 +41,7 @@ export function LoginForm({
       }
       const response = await axios.post('/api/users/login', payload)
       toast.success("Login Successful")
-      router.push("/chat")
+      router.push("/chatdesk")
     } catch (error: any) {
       toast.error("Login Failed")
       setLoading(false);
