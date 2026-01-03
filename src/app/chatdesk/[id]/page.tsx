@@ -8,6 +8,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
 import { useParams } from "next/navigation";
 
@@ -30,6 +31,9 @@ import { toast } from "sonner";
 export default function Page() {
   const params = useParams();
   const chatSessionId = params.id as string;
+  const [skeletonVisibility, setSkeletonVisibility] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false)
+  const [buttonDisable, setButtonDisable] = useState(false)
   const [prompt, setPrompt] = useState("");
   const [messages, setMessages] = useState<
     { role: "user" | "assistant"; content: string }[]
@@ -40,17 +44,29 @@ export default function Page() {
   };
 
   const sendButtonClicked = async () => {
+    if (!prompt) {
+      toast.warning("Message field cannot be empty!")
+      return
+    } else if (buttonDisable) {
+      toast.warning("Wait for GPT response!")
+      return
+    }
+    setButtonDisable(true)
+    setSkeletonVisibility(true);
+    setButtonLoading(true);
     setMessages((prev) => [...prev, { role: "user", content: prompt }]);
-
     const payload = {
       session: chatSessionId,
       role: "user",
       content: prompt,
     };
-    
+
     setPrompt("");
     await axios.post("/api/users/chatresponse", payload);
     fetchChats(chatSessionId);
+    setSkeletonVisibility(false);
+    setButtonLoading(false);
+    setButtonDisable(false)
   };
 
   const fetchChats = async (sessionId: string) => {
@@ -82,7 +98,7 @@ export default function Page() {
 
   return (
     <SidebarProvider>
-      <AppSidebar sessionId={chatSessionId}/>
+      <AppSidebar sessionId={chatSessionId} />
       <SidebarInset>
         <header className="flex h-14 shrink-0 items-center gap-2 sticky top-0 z-50 bg-neutral-950">
           <div className="flex flex-1 items-center gap-2 px-3">
@@ -148,6 +164,15 @@ export default function Page() {
                 )}
               </div>
             ))}
+
+            {skeletonVisibility && (
+              <div className="flex flex-col gap-2">
+                <Skeleton className="h-6 w-full rounded-md" />
+                <Skeleton className="h-6 w-11/12 rounded-md" />
+                <Skeleton className="h-6 w-10/12 rounded-md" />
+                <Skeleton className="h-6 w-9/12 rounded-md" />
+              </div>
+            )}
             <div ref={bottomRef} />
           </div>
         </div>
@@ -158,7 +183,7 @@ export default function Page() {
             value={prompt}
             onChange={handleChange}
           />
-          <Button onClick={sendButtonClicked}>Send message</Button>
+          <Button onClick={sendButtonClicked}>{buttonLoading ? <Spinner/> : "Send message" }</Button>
         </div>
       </SidebarInset>
     </SidebarProvider>
