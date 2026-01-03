@@ -38,62 +38,20 @@ import {
 const data = [
   [
     {
-      label: "Customize Page",
+      label: "Share",
       icon: Settings2,
     },
     {
-      label: "Turn into wiki",
+      label: "Archive",
       icon: FileText,
     },
-  ],
-  [
     {
-      label: "Copy Link",
+      label: "Report",
       icon: Link,
     },
     {
-      label: "Duplicate",
+      label: "Delete",
       icon: Copy,
-    },
-    {
-      label: "Move to",
-      icon: CornerUpRight,
-    },
-    {
-      label: "Move to Trash",
-      icon: Trash2,
-    },
-  ],
-  [
-    {
-      label: "Undo",
-      icon: CornerUpLeft,
-    },
-    {
-      label: "View analytics",
-      icon: LineChart,
-    },
-    {
-      label: "Version History",
-      icon: GalleryVerticalEnd,
-    },
-    {
-      label: "Show delete pages",
-      icon: Trash,
-    },
-    {
-      label: "Notifications",
-      icon: Bell,
-    },
-  ],
-  [
-    {
-      label: "Import",
-      icon: ArrowUp,
-    },
-    {
-      label: "Export",
-      icon: ArrowDown,
     },
   ],
 ]
@@ -121,7 +79,7 @@ export function NavActions() {
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-56 overflow-hidden rounded-lg p-0"
+          className="w-28 overflow-hidden rounded-lg p-0"
           align="end"
         >
           <Sidebar collapsible="none" className="bg-transparent">

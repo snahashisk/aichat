@@ -22,12 +22,13 @@ import Link from "next/link";
 
 export function NavFavorites({
   favorites,
+  chatSessionId
 }: {
   favorites: {
     name: string;
     url: string;
   }[];
-}) {
+} & {chatSessionId: string}) {
   const { isMobile } = useSidebar();
 
   return (
@@ -36,7 +37,7 @@ export function NavFavorites({
       <SidebarMenu>
         {favorites.map((item) => (
           <SidebarMenuItem key={item.url}>
-            <SidebarMenuButton asChild>
+            <SidebarMenuButton asChild isActive={item.url === chatSessionId}>
               <Link href={`/chatdesk/${item.url}`}>
                 <span>{item.name}</span>
               </Link>
@@ -66,12 +67,6 @@ export function NavFavorites({
             </DropdownMenu>
           </SidebarMenuItem>
         ))}
-        {/* <SidebarMenuItem>
-          <SidebarMenuButton className="text-sidebar-foreground/70">
-            <MoreHorizontal />
-            <span>More</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem> */}
       </SidebarMenu>
     </SidebarGroup>
   );

@@ -82,7 +82,7 @@ export default function Page() {
 
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar sessionId={chatSessionId}/>
       <SidebarInset>
         <header className="flex h-14 shrink-0 items-center gap-2 sticky top-0 z-50 bg-neutral-950">
           <div className="flex flex-1 items-center gap-2 px-3">
@@ -108,7 +108,7 @@ export default function Page() {
         <div className="flex flex-1 flex-col overflow-hidden">
           <div
             ref={messagesContainerRef}
-            className="flex-1 overflow-y-auto px-3 py-4 max-w-4xl mx-auto flex flex-col gap-4"
+            className="flex-1 overflow-y-auto px-3 py-4 max-w-4xl lg:w-4xl mx-auto flex flex-col gap-4"
           >
             {messages.map((msg, index) => (
               <div

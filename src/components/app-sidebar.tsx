@@ -78,8 +78,12 @@ const data = {
     },
   ],
 }
+type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
+  sessionId: string;
+};
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+
+export function AppSidebar({ sessionId, ...props }: AppSidebarProps ) {
 
    const [openDialog, setOpenDialog] = React.useState(false)
 
@@ -164,7 +168,6 @@ const submitTitle = async (e: React.FormEvent) => {
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
         <NavMain items={navMain} />
-
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogContent className="sm:max-w-106.25">
         <form onSubmit={submitTitle}>
@@ -188,10 +191,9 @@ const submitTitle = async (e: React.FormEvent) => {
         </form>
       </DialogContent>
     </Dialog>
-
       </SidebarHeader>
       <SidebarContent>
-        <NavFavorites favorites={chatSessions} />
+        <NavFavorites favorites={chatSessions} chatSessionId={sessionId} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
