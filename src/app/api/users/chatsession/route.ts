@@ -3,36 +3,35 @@ import ChatSession from "@/models/sessionModel";
 import { NextRequest, NextResponse } from "next/server";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 
-connect();
+await connect();
 
-export async function POST(request: NextRequest){
+export async function POST(request: NextRequest) {
   try {
-  const user = await getDataFromToken(request)
-  const reqBody = await request.json();
-  const {title} = reqBody;
-  console.log(reqBody);
+    const user = await getDataFromToken(request);
+    const reqBody = await request.json();
+    const { title } = reqBody;
+    console.log(reqBody);
 
-  const newSession = new ChatSession({
-    user,
-    title
-  })
+    const newSession = new ChatSession({
+      user,
+      title,
+    });
 
-  const savedSession = await newSession.save();
+    const savedSession = await newSession.save();
 
-  return NextResponse.json({
-    message: "New Session Created Successfully",
-    success: true,
-    savedSession
-  })
+    return NextResponse.json({
+      message: "New Session Created Successfully",
+      success: true,
+      savedSession,
+    });
   } catch (error: any) {
-    return NextResponse.json({error: error.message},{status: 500})
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
-
 export async function GET(request: NextRequest) {
   try {
-    const user = await getDataFromToken(request)
+    const user = await getDataFromToken(request);
 
     if (!user) {
       return NextResponse.json(
@@ -42,18 +41,14 @@ export async function GET(request: NextRequest) {
     }
 
     const sessions = await ChatSession.find({
-      user: user
-    })
+      user: user,
+    });
 
     return NextResponse.json({
       success: true,
-      sessions
+      sessions,
     });
-
   } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

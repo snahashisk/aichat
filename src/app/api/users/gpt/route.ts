@@ -1,15 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-
-// const client = new OpenAI({
-//   baseURL: "https://api.aimlapi.com/v1",
-//   apiKey: process.env.AIML_API_KEY!,
-// });
 
 const genAI = new GoogleGenerativeAI(process.env.AIML_API_KEY!);
 
 export async function POST(req: Request) {
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
   try {
     const body = await req.json();
     const { prompt } = body;

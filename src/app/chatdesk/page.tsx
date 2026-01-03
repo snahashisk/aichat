@@ -119,7 +119,6 @@ export default function Page() {
             ref={messagesContainerRef}
             className="flex-1 overflow-y-auto px-3 py-4 max-w-4xl mx-auto flex flex-col gap-4"
           >
-            {" "}
             {messages.map((msg, index) => (
               <div
                 key={index}
@@ -130,17 +129,13 @@ export default function Page() {
                 }`}
               >
                 {msg.role === "assistant" ? (
-                  <div className="prose dark:prose-invert max-w-none">
-                    <div className="prose prose-neutral dark:prose-invert max-w-none">
-                      <ReactMarkdown
-                        remarkPlugins={[remarkGfm]}
-                        components={{
-                          code({ className, children, ...props }) {
-                            const match = /language-(\w+)/.exec(
-                              className || ""
-                            );
-
-                            return match ? (
+                  <div className="prose prose-neutral dark:prose-invert max-w-none">
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        code({ className, children, ...props }) {
+                          const match = /language-(\w+)/.exec(className || "");
+                          return match ? (
                               <SyntaxHighlighter
                                 style={oneDark}
                                 language={match[1]}
@@ -148,20 +143,18 @@ export default function Page() {
                               >
                                 {String(children).replace(/\n$/, "")}
                               </SyntaxHighlighter>
-                            ) : (
-                              <code
-                                className="bg-neutral-800 px-1 rounded"
-                                {...props}
-                              >
-                                {children}
-                              </code>
-                            );
-                          },
-                        }}
-                      >
-                        {msg.content}
-                      </ReactMarkdown>
-                    </div>
+                          ) : (
+                            <code
+                              {...props}
+                            >
+                              {children}
+                            </code>
+                          );
+                        },
+                      }}
+                    >
+                      {msg.content}
+                    </ReactMarkdown>
                   </div>
                 ) : (
                   <p className="whitespace-pre-wrap">{msg.content}</p>
