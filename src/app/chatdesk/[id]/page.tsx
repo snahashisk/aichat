@@ -11,6 +11,7 @@ import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
 import { useParams } from "next/navigation";
+import { LoaderFive } from "@/components/ui/loader";
 
 import {
   Breadcrumb,
@@ -167,6 +168,7 @@ export default function Page() {
 
             {skeletonVisibility && (
               <div className="flex flex-col gap-2">
+                <LoaderFive text="Generating response..." />
                 <Skeleton className="h-6 w-full rounded-md" />
                 <Skeleton className="h-6 w-11/12 rounded-md" />
                 <Skeleton className="h-6 w-10/12 rounded-md" />
