@@ -47,7 +47,7 @@ export function LoginForm({
       toast.success("Login Successful")
       router.push(`/chatdesk/${formattedSessions}`)
     } catch (error: any) {
-      toast.error("Login Failed")
+      toast.error("Login Failed No Session Found")
       setLoading(false);
     }
   }

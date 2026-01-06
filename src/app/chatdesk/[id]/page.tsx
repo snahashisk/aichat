@@ -33,8 +33,8 @@ export default function Page() {
   const params = useParams();
   const chatSessionId = params.id as string;
   const [skeletonVisibility, setSkeletonVisibility] = useState(false);
-  const [buttonLoading, setButtonLoading] = useState(false)
-  const [buttonDisable, setButtonDisable] = useState(false)
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const [buttonDisable, setButtonDisable] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [messages, setMessages] = useState<
     { role: "user" | "assistant"; content: string }[]
@@ -46,13 +46,13 @@ export default function Page() {
 
   const sendButtonClicked = async () => {
     if (!prompt) {
-      toast.warning("Message field cannot be empty!")
-      return
+      toast.warning("Message field cannot be empty!");
+      return;
     } else if (buttonDisable) {
-      toast.warning("Wait for GPT response!")
-      return
+      toast.warning("Wait for GPT response!");
+      return;
     }
-    setButtonDisable(true)
+    setButtonDisable(true);
     setSkeletonVisibility(true);
     setButtonLoading(true);
     setMessages((prev) => [...prev, { role: "user", content: prompt }]);
@@ -67,7 +67,7 @@ export default function Page() {
     fetchChats(chatSessionId);
     setSkeletonVisibility(false);
     setButtonLoading(false);
-    setButtonDisable(false)
+    setButtonDisable(false);
   };
 
   const fetchChats = async (sessionId: string) => {
@@ -112,7 +112,7 @@ export default function Page() {
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbPage className="line-clamp-1">
-                    Project Management & Task Tracking
+                    Interact with our fastest GPT Model
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
@@ -127,44 +127,63 @@ export default function Page() {
             ref={messagesContainerRef}
             className="flex-1 overflow-y-auto px-3 py-4 max-w-4xl lg:w-4xl mx-auto flex flex-col gap-4"
           >
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`leading-6 rounded-xl p-4 ${
-                  msg.role === "user"
-                    ? "bg-neutral-900 max-w-2xl ml-auto whitespace-pre-wrap"
-                    : "bg-neutral-950 max-w-4xl text-neutral-100"
-                }`}
-              >
-                {msg.role === "assistant" ? (
-                  <div className="prose prose-neutral dark:prose-invert max-w-none">
-                    <ReactMarkdown
-                      remarkPlugins={[remarkGfm]}
-                      components={{
-                        code({ className, children, ...props }) {
-                          const match = /language-(\w+)/.exec(className || "");
-                          return match ? (
-                            <SyntaxHighlighter
-                              style={oneDark}
-                              language={match[1]}
-                              PreTag="div"
-                            >
-                              {String(children).replace(/\n$/, "")}
-                            </SyntaxHighlighter>
-                          ) : (
-                            <code {...props}>{children}</code>
-                          );
-                        },
-                      }}
-                    >
-                      {msg.content}
-                    </ReactMarkdown>
-                  </div>
-                ) : (
-                  <p className="whitespace-pre-wrap">{msg.content}</p>
-                )}
-              </div>
-            ))}
+            {messages.length === 0 && (
+              <>
+                <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance">
+                  Ask me anything you want to know
+                </h1>
+                <p className="leading-7 text-center [&:not(:first-child)]:mt-6">
+                  I can assist with a wide range of tasks such as answering
+                  questions, generating creative or technical text, translating
+                  between languages, summarizing long content, brainstorming
+                  ideas, and explaining complex topics in a clear way. Overall,
+                  I help with information, language, learning, and creative
+                  problem-solving.
+                </p>
+              </>
+            )}
+
+            {messages &&
+              messages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`leading-6 rounded-xl p-4 ${
+                    msg.role === "user"
+                      ? "bg-neutral-900 max-w-2xl ml-auto whitespace-pre-wrap"
+                      : "bg-neutral-950 max-w-4xl text-neutral-100"
+                  }`}
+                >
+                  {msg.role === "assistant" ? (
+                    <div className="prose prose-neutral dark:prose-invert max-w-none">
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                          code({ className, children, ...props }) {
+                            const match = /language-(\w+)/.exec(
+                              className || ""
+                            );
+                            return match ? (
+                              <SyntaxHighlighter
+                                style={oneDark}
+                                language={match[1]}
+                                PreTag="div"
+                              >
+                                {String(children).replace(/\n$/, "")}
+                              </SyntaxHighlighter>
+                            ) : (
+                              <code {...props}>{children}</code>
+                            );
+                          },
+                        }}
+                      >
+                        {msg.content}
+                      </ReactMarkdown>
+                    </div>
+                  ) : (
+                    <p className="whitespace-pre-wrap">{msg.content}</p>
+                  )}
+                </div>
+              ))}
 
             {skeletonVisibility && (
               <div className="flex flex-col gap-2">
@@ -185,7 +204,9 @@ export default function Page() {
             value={prompt}
             onChange={handleChange}
           />
-          <Button onClick={sendButtonClicked}>{buttonLoading ? <Spinner/> : "Send message" }</Button>
+          <Button onClick={sendButtonClicked}>
+            {buttonLoading ? <Spinner /> : "Send message"}
+          </Button>
         </div>
       </SidebarInset>
     </SidebarProvider>
