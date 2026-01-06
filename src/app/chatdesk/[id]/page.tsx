@@ -132,7 +132,7 @@ export default function Page() {
                 <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance">
                   Ask me anything you want to know
                 </h1>
-                <p className="leading-7 text-center [&:not(:first-child)]:mt-6">
+                <p className="leading-7 text-center not-first:mt-6">
                   I can assist with a wide range of tasks such as answering
                   questions, generating creative or technical text, translating
                   between languages, summarizing long content, brainstorming

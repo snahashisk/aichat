@@ -44,26 +44,11 @@ import { useRouter } from "next/navigation"
 // This is sample data.
 const data = {
   user: {
-    name: "shadcn",
+    name: "Cloud GPt",
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
   teams: [
-    {
-      name: "Acme Inc",
-      logo: Command,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
   ],
   navSecondary: [
     {

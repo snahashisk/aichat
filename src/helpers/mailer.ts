@@ -1,37 +1,49 @@
-import User from '@/models/userModel';
-import bcrypt from 'bcryptjs';
-import nodemailer from 'nodemailer';
-import crypto from 'crypto'
+import User from "@/models/userModel";
+import bcrypt from "bcryptjs";
+import nodemailer from "nodemailer";
+import crypto from "crypto";
 
-
-export const sendEmail = async({email, emailType, userId}:any) => {
+export const sendEmail = async ({ email, emailType, userId }: any) => {
   const otp = crypto.randomInt(100000, 999999);
   try {
-      //configure mail for usage
-      console.log(otp);
-      const hashedVerifyToken = otp;
-      const hashedResetToken = await bcrypt.hash(userId.toString(), 5);
+    //configure mail for usage
+    console.log(otp);
+    const hashedVerifyToken = otp;
+    const hashedResetToken = await bcrypt.hash(userId.toString(), 5);
 
-      if (emailType === 'VERIFY') {
-        await User.findByIdAndUpdate(userId, { $set: {verifyToken: hashedVerifyToken, verifyTokenExpiry: Date.now() + 3600000}})
-      }else if (emailType === 'RESET') {
-        await User.findByIdAndUpdate(userId, { $set: {forgotPasswordToken: hashedResetToken, forgotPasswordTokenExpiry: Date.now() + 3600000}})
-      }
+    if (emailType === "VERIFY") {
+      await User.findByIdAndUpdate(userId, {
+        $set: {
+          verifyToken: hashedVerifyToken,
+          verifyTokenExpiry: Date.now() + 3600000,
+        },
+      });
+    } else if (emailType === "RESET") {
+      await User.findByIdAndUpdate(userId, {
+        $set: {
+          forgotPasswordToken: hashedResetToken,
+          forgotPasswordTokenExpiry: Date.now() + 3600000,
+        },
+      });
+    }
 
     // Looking to send emails in production? Check out our Email API/SMTP product!
-      const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: process.env.MAIL_ID,
-          pass: process.env.MAIL_PASSWORD
-        }
-});
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.MAIL_ID,
+        pass: process.env.MAIL_PASSWORD,
+      },
+    });
 
     const mailOptions = {
-    from: process.env.MAIL_ID,
-    to: email,
-    subject: emailType === 'VERIFY' ? "Verify Your Email!!!" : "Reset Your Password!!!",
-    html: `
+      from: process.env.MAIL_ID,
+      to: email,
+      subject:
+        emailType === "VERIFY"
+          ? "Verify Your Email!!!"
+          : "Reset Your Password!!!",
+      html: `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -72,16 +84,12 @@ export const sendEmail = async({email, emailType, userId}:any) => {
           <tbody>
             <tr style="height: 0;">
               <td>
-                <img
-                  alt=""
-                  src="https://archisketch-resources.s3.ap-northeast-2.amazonaws.com/vrstyler/1663574980688_114990/archisketch-logo"
-                  height="30px"
-                />
+                <h1 style="font-size: 24px; line-height: 30px; color: #ffffff;">CLoud GPT</h1>
               </td>
               <td style="text-align: right;">
                 <span
                   style="font-size: 16px; line-height: 30px; color: #ffffff;"
-                  >12 Nov, 2021</span
+                  >07 Dec, 2026</span
                 >
               </td>
             </tr>
@@ -129,7 +137,7 @@ export const sendEmail = async({email, emailType, userId}:any) => {
                 letter-spacing: 0.56px;
               "
             >
-              Thank you for choosing Archisketch Company. Use the following OTP
+              Thank you for choosing Cloud GPT. Use the following OTP
               to complete the procedure to change your email address. OTP is
               valid for
               <span style="font-weight: 600; color: #1f1f1f;">5 minutes</span>.
@@ -163,9 +171,9 @@ export const sendEmail = async({email, emailType, userId}:any) => {
         >
           Need help? Ask at
           <a
-            href="mailto:archisketch@gmail.com"
+            href="mailto:cloudgpt@gmail.com"
             style="color: #499fb6; text-decoration: none;"
-            >archisketch@gmail.com</a
+            >cloudgpt@gmail.com</a
           >
           or visit our
           <a
@@ -195,7 +203,7 @@ export const sendEmail = async({email, emailType, userId}:any) => {
             color: #434343;
           "
         >
-          Archisketch Company
+          CLoud GPT
         </p>
         <p style="margin: 0; margin-top: 8px; color: #434343;">
           Address 540, City, State.
@@ -248,10 +256,10 @@ export const sendEmail = async({email, emailType, userId}:any) => {
   </body>
 </html>
           `,
-    }
-    const mailResponse = await transporter.sendMail(mailOptions)
+    };
+    const mailResponse = await transporter.sendMail(mailOptions);
     return mailResponse;
-  } catch (error:any) {
-    throw new Error(error.message)
+  } catch (error: any) {
+    throw new Error(error.message);
   }
-}
+};
