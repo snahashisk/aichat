@@ -133,15 +133,15 @@ const [title, setTitle] = React.useState("");
 const submitTitle = async (e: React.FormEvent) => {
   try {
     e.preventDefault()
-    const payload = {title: title}
-    console.log("I am tryting")
-    setOpenDialog(false)
-    const res = await axios.post("/api/users/chatsession", payload)
+    const payload = {title: title};
+    console.log("I am tryting");
+    setOpenDialog(false);
+    const res = await axios.post("/api/users/chatsession", payload);
     setOpenDialog(false)
     setTitle("")
     toast.success("New Session Created");
+    router.push(`/chatdesk/${res.data.sessionId}`)
     loadSession();
-    console.log(res)
   } catch (error: any) {
     toast.error(error.message)
   }

@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       message: "New Session Created Successfully",
       success: true,
-      savedSession,
+      sessionId: savedSession._id,
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
