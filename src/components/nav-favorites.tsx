@@ -22,13 +22,13 @@ import Link from "next/link";
 
 export function NavFavorites({
   favorites,
-  chatSessionId
+  chatSessionId,
 }: {
   favorites: {
     name: string;
     url: string;
   }[];
-} & {chatSessionId: string}) {
+} & { chatSessionId: string }) {
   const { isMobile } = useSidebar();
 
   return (

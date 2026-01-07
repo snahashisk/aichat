@@ -1,60 +1,62 @@
-'use client'
+"use client";
 
-import { Spinner } from "./ui/spinner"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { Spinner } from "./ui/spinner";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import axios from "axios"
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import axios from "axios";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { toast } from "sonner"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export function LoginForm({
-  className, 
+  className,
   ...props
 }: React.ComponentProps<"form">) {
-
-  const router = useRouter()
+  const router = useRouter();
   const [user, setUser] = useState({
     email: "",
-    password: ""
-  })
+    password: "",
+  });
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const onSignin = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      setLoading(true)
+      setLoading(true);
       const payload = {
         email: user.email,
-        password: user.password
-      }
-      await axios.post('/api/users/login', payload)
+        password: user.password,
+      };
+      await axios.post("/api/users/login", payload);
 
       const res = await axios.get("/api/users/chatsession");
       const sessions = res.data.sessions;
       const formattedSessions = sessions.reverse()[0]._id;
-      toast.success("Login Successful")
-      router.push(`/chatdesk/${formattedSessions}`)
+      toast.success("Login Successful");
+      router.push(`/chatdesk/${formattedSessions}`);
     } catch (error: any) {
-      toast.error("Login Failed No Session Found")
+      toast.error("Login Failed No Session Found");
       setLoading(false);
     }
-  }
-
+  };
 
   return (
-    <form onSubmit={onSignin} className={cn("flex flex-col gap-6", className)} {...props}>
+    <form
+      onSubmit={onSignin}
+      className={cn("flex flex-col gap-6", className)}
+      {...props}
+    >
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Login to your account</h1>
@@ -64,7 +66,14 @@ export function LoginForm({
         </div>
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
-          <Input id="email" value={user.email} onChange={(e) => setUser({...user, email: e.target.value})} type="email" placeholder="example@example.com" required />
+          <Input
+            id="email"
+            value={user.email}
+            onChange={(e) => setUser({ ...user, email: e.target.value })}
+            type="email"
+            placeholder="example@example.com"
+            required
+          />
         </Field>
         <Field>
           <div className="flex items-center">
@@ -76,10 +85,16 @@ export function LoginForm({
               Forgot your password?
             </a>
           </div>
-          <Input id="password" value={user.password} onChange={(e) => setUser({...user, password: e.target.value})} type="password" required />
+          <Input
+            id="password"
+            value={user.password}
+            onChange={(e) => setUser({ ...user, password: e.target.value })}
+            type="password"
+            required
+          />
         </Field>
         <Field>
-          <Button type="submit">{loading? <Spinner /> : "Login"}</Button>
+          <Button type="submit">{loading ? <Spinner /> : "Login"}</Button>
         </Field>
         <FieldSeparator>Or continue with</FieldSeparator>
         <Field>
@@ -101,5 +116,5 @@ export function LoginForm({
         </Field>
       </FieldGroup>
     </form>
-  )
+  );
 }

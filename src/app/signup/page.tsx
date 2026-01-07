@@ -1,7 +1,7 @@
-import { GalleryVerticalEnd } from "lucide-react"
+import { GalleryVerticalEnd } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-import { SignupForm } from "@/components/signup-form"
+import { SignupForm } from "@/components/signup-form";
 import { BackgroundLines } from "@/components/ui/background-lines";
 
 export default function SignupPage() {
@@ -28,11 +28,12 @@ export default function SignupPage() {
             Smart AI Chatbot Platform <br /> Built on Cloud
           </h2>
           <p className="max-w-xl mx-auto text-sm md:text-lg text-neutral-700 dark:text-neutral-400 text-center">
-            Access intelligent, secure, and scalable AI-powered conversations.  
-            Get instant assistance, automation, and insights powered by modern cloud architecture — all in one place.
+            Access intelligent, secure, and scalable AI-powered conversations.
+            Get instant assistance, automation, and insights powered by modern
+            cloud architecture — all in one place.
           </p>
         </BackgroundLines>
       </div>
     </div>
-  )
+  );
 }

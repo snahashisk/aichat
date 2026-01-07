@@ -5,7 +5,6 @@ import { useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import { IconBrandYoutubeFilled } from "@tabler/icons-react";
 
-
 export default function FeaturesSectionDemo() {
   const features = [
     {
