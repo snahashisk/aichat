@@ -7,7 +7,7 @@ const verifyPage = async ({
   params: Promise<{ userid: string }>;
 }) => {
   const { userid } = await params;
-
+  //Added Comments
   return (
     <div className="flex min-h-svh w-full">
       <div className="flex w-full items-center justify-center p-6 lg:w-1/2">
